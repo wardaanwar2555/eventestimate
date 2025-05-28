@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Estimation - Eventective</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+        }
+        
+        /* Header Styles */
+        header {
+            background-color: #2d4654;
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+        
+        .nav-menu {
+            display: flex;
+            gap: 1.5rem;
+        }
+        
+        .nav-item {
+            color: white;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        
+        .nav-item a {
+            text-decoration: none;
+            color: #f5f2f2;
+            font-size: 16px;
+            transition: color 0.3s ease;
+        }
+
+        .nav-item a:hover {
+            color: #6392b9;
+        }
+        
+        /* Hero Header Section */
+        .hero-header {
+            background-image: linear-gradient(#29616a, #1b3b40), url('/api/placeholder/1200/400');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+        
+        .hero-title {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        /* Main Content Styles */
+        .main-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        
+        .page-title {
+            text-align: center;
+            font-size: 2.5rem;
+            color: #0c2340;
+            margin-bottom: 1rem;
+        }
+        
+        .page-subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 3rem;
+        }
+
+        /* Pricing Cards */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .pricing-card {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .pricing-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .pricing-header {
+            background-color: #0c2340;
+            padding: 1.5rem;
+            text-align: center;
+            color: white;
+        }
+        
+        .pricing-title {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .pricing-price {
+            font-size: 2.5rem;
+            font-weight: bold;
+        }
+        
+        .pricing-period {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .pricing-features {
+            padding: 1.5rem;
+            flex-grow: 1;
+        }
+        
+        .pricing-features ul {
+            list-style: none;
+            margin-bottom: 1.5rem;
+        }
+        
+        .pricing-features li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #eee;
+            color: #666;
+        }
+        
+        .pricing-features li:last-child {
+            border-bottom: none;
+        }
+        
+        .pricing-btn {
+            background-color: #F7941D;
+            color: white;
+            border: none;
+            padding: 0.8rem 0;
+            font-size: 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+        }
+        
+        .pricing-btn:hover {
+            background-color: #e67e00;
+        }
+        
+        /* Components Section */
+        .components-title {
+            font-size: 2rem;
+            color: #0c2340;
+            margin: 3rem 0 1.5rem;
+            text-align: center;
+        }
+        
+        .components-subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 2rem;
+        }
+        
+        .components-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .component-card {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .component-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .component-icon {
+            background-color: #29616a;
+            padding: 1.5rem;
+            display: flex;
+            justify-content: center;
+        }
+        
+        .component-icon img {
+            width: 60px;
+            height: 60px;
+            background-color: white;
+            border-radius: 50%;
+            padding: 12px;
+        }
+        
+        .component-details {
+            padding: 1.5rem;
+        }
+        
+        .component-title {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: #0c2340;
+        }
+        
+        .component-list {
+            list-style: none;
+        }
+        
+        .component-list li {
+            padding: 0.5rem 0;
+            color: #666;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .component-list li:last-child {
+            border-bottom: none;
+        }
+        
+        /* Estimation Calculator */
+        .calculator-section {
+            margin-top: 4rem;
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .calculator-title {
+            text-align: center;
+            font-size: 1.8rem;
+            color: #0c2340;
+            margin-bottom: 2rem;
+        }
+        
+        .calculator-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+        
+        .calculator-form .full-width {
+            grid-column: span 2;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        
+        .calculate-btn {
+            background-color: #F7941D;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            display: block;
+            margin: 2rem auto 0;
+            width: 100%;
+            max-width: 300px;
+        }
+        
+        .calculate-btn:hover {
+            background-color: #e67e00;
+        }
+        
+        .estimation-result {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            border: 2px solid #0c2340;
+            border-radius: 8px;
+            display: none;
+        }
+        
+        .estimation-result h3 {
+            color: #0c2340;
+            margin-bottom: 1rem;
+        }
+        
+        .result-row {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid #eee;
+            padding: 0.8rem 0;
+        }
+        
+        .result-total {
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: #F7941D;
+        }
+        
+        /* Footer Styles */
+        footer {
+            background-color: #2d4654;
+            color: white;
+            padding: 2rem;
+            margin-top: 4rem;
+        }
+        
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+        
+        .footer-section h3 {
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+        
+        .footer-links a {
+            color: #ddd;
+            text-decoration: none;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+            text-decoration: underline;
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 2rem;
+            margin-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="logo">Event</div>
+        <div class="nav-menu">
+            <div class="nav-item"><a href="/">Home</a></div>
+            <div class="nav-item"><a href="/eventtypes">Event Type</a></div>
+           
+        </div>
+    </header>
+    
+    <!-- Hero Header Section -->
+    <section class="hero-header">
+        <h1 class="hero-title">Event Cost Estimation</h1>
+        <p class="hero-subtitle">Plan your budget with confidence using our comprehensive event estimation tools. Calculate costs, compare options, and make informed decisions for your perfect event.</p>
+    </section>
+    
+    <!-- Main Content -->
+    <div class="main-container">
+        <h1 class="page-title">Event Estimation Services</h1>
+        <p class="page-subtitle">Choose the right estimation package for your event needs</p>
+        
+        <!-- Pricing Cards -->
+        <div class="pricing-grid">
+            <!-- Basic Package -->
+            <div class="pricing-card">
+                <div class="pricing-header">
+                    <h2 class="pricing-title">Basic Estimation</h2>
+                    <div class="pricing-price">$0</div>
+                    <div class="pricing-period">Free</div>
+                </div>
+                <div class="pricing-features">
+                    <ul>
+                        <li>Basic cost calculator</li>
+                        <li>Standard event categories</li>
+                        <li>Email estimate summary</li>
+                        <li>Access to vendor directory</li>
+                        <li>Save up to 2 estimates</li>
+                    </ul>
+                    <button class="pricing-btn">Start Free</button>
+                </div>
+            </div>
+            
+            <!-- Standard Package -->
+            <div class="pricing-card">
+                <div class="pricing-header" style="background-color: #29616a;">
+                    <h2 class="pricing-title">Standard Estimation</h2>
+                    <div class="pricing-price">$49</div>
+                    <div class="pricing-period">One-time</div>
+                </div>
+                <div class="pricing-features">
+                    <ul>
+                        <li>Detailed cost breakdown</li>
+                        <li>Customizable categories</li>
+                        <li>PDF export options</li>
+                        <li>Vendor comparison tool</li>
+                        <li>Save unlimited estimates</li>
+                        <li>30-minute consultation</li>
+                    </ul>
+                    <button class="pricing-btn">Select Plan</button>
+                </div>
+            </div>
+            
+            <!-- Premium Package -->
+            <div class="pricing-card">
+                <div class="pricing-header" style="background-color: #F7941D;">
+                    <h2 class="pricing-title">Premium Estimation</h2>
+                    <div class="pricing-price">$129</div>
+                    <div class="pricing-period">One-time</div>
+                </div>
+                <div class="pricing-features">
+                    <ul>
+                        <li>Complete budget analysis</li>
+                        <li>Unlimited customizations</li>
+                        <li>Real-time price comparisons</li>
+                        <li>Exclusive vendor discounts</li>
+                        <li>1-hour expert consultation</li>
+                        <li>Budget optimization strategies</li>
+                        <li>12-month access to updates</li>
+                    </ul>
+                    <button class="pricing-btn">Select Premium</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Components Section -->
+        <h2 class="components-title">Core Components of Event Estimation</h2>
+        <p class="components-subtitle">Comprehensive breakdown of all costs associated with your event</p>
+        
+        <div class="components-grid">
+            <!-- Component 1: Event Details -->
+            <div class="component-card">
+                <div class="component-icon">
+               <img src="{{ url_for('static', filename='images/a1.png') }}" alt="Download Image" width="400">
+                </div>
+                <div class="component-details">
+                    <h3 class="component-title">1. Event Details</h3>
+                    <ul class="component-list">
+                        <li>Event type (Party, Wedding, Meeting, etc.)</li>
+                        <li>Date & time</li>
+                        <li>Location</li>
+                        <li>Number of guests</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Component 2: Venue Costs -->
+            <div class="component-card">
+                <div class="component-icon">
+                 <img src="{{ url_for('static', filename='images/a2.png') }}" alt="Download Image" width="400">
+                </div>
+                <div class="component-details">
+                    <h3 class="component-title">2. Venue Costs</h3>
+                    <ul class="component-list">
+                        <li>Rental fee</li>
+                        <li>Deposit</li>
+                        <li>Setup/cleanup charges</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Component 3: Catering -->
+            <div class="component-card">
+                <div class="component-icon">
+                 <img src="{{ url_for('static', filename='images/a3.png') }}" alt="Download Image" width="400">
+                </div>
+                <div class="component-details">
+                    <h3 class="component-title">3. Catering</h3>
+                    <ul class="component-list">
+                        <li>Per person meal cost (buffet, plated, snacks, etc.)</li>
+                        <li>Drinks & beverages (alcoholic/non-alcoholic)</li>
+                        <li>Service staff charges</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Component 4: Decorations -->
+            <div class="component-card">
+                <div class="component-icon">
+              <img src="{{ url_for('static', filename='images/a4.png') }}" alt="Download Image" width="400">
+                </div>
+                <div class="component-details">
+                    <h3 class="component-title">4. Decorations</h3>
+                    <ul class="component-list">
+                        <li>Theme/decor concept</li>
+                        <li>Floral arrangements</li>
+                        <li>Lighting</li>
+                        <li>Furniture or special setup</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Component 5: Entertainment -->
+            <div class="component-card">
+                <div class="component-icon">
+                  <img src="{{ url_for('static', filename='images/a5.png') }}" alt="Download Image" width="400">
+                </div>
+                <div class="component-details">
+                    <h3 class="component-title">5. Entertainment</h3>
+                    <ul class="component-list">
+                        <li>DJs, bands, or speakers</li>
+                        <li>Audio/visual equipment</li>
+                        <li>Stage, projector, screen</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Component 6: Photography & Videography -->
+            <div class="component-card">
+                <div class="component-icon">
+               <img src="{{ url_for('static', filename='images/images6.png') }}" alt="Download Image" width="400">
+                </div>
+                <div class="component-details">
+                    <h3 class="component-title">6. Photography & Videography</h3>
+                    <ul class="component-list">
+                        <li>Photo packages</li>
+                        <li>Drone or special video services</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Component 7: Transportation -->
+            <div class="component-card">
+                <div class="component-icon">
+            <img src="{{ url_for('static', filename='images/a6.jpg') }}" alt="Download Image" width="400">
+                </div>
+                <div class="component-details">
+                    <h3 class="component-title">7. Transportation</h3>
+                    <ul class="component-list">
+                        <li>Guest shuttle/bus services</li>
+                        <li>Parking fees</li>
+                        <li>Staff/crew transportation</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Component 8: Invitations & Print Materials -->
+            <div class="component-card">
+                <div class="component-icon">
+               <img src="{{ url_for('static', filename='images/a6.jpg') }}" alt="Download Image" width="400">
+                </div>
+                <div class="component-details">
+                    <h3 class="component-title">8. Invitations & Print Materials</h3>
+                    <ul class="component-list">
+                        <li>Printed/digital invitations</li>
+                        <li>Event programs or signage</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Component 9: Security & Insurance -->
+            <div class="component-card">
+                <div class="component-icon">
+                   <img src="{{ url_for('static', filename='images/a7.png') }}" alt="Download Image" width="400">
+                </div>
+                <div class="component-details">
+                    <h3 class="component-title">9. Security & Insurance</h3>
+                    <ul class="component-list">
+                        <li>Security personnel</li>
+                        <li>Event liability insurance</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Component 10: Miscellaneous -->
+            <div class="component-card">
+                <div class="component-icon">
+                <img src="{{ url_for('static', filename='images/a8.png') }}" alt="Download Image" width="400">
+                </div>
+                <div class="component-details">
+                    <h3 class="component-title">10. Miscellaneous</h3>
+                    <ul class="component-list">
+                        <li>Event planner fee</li>
+                        <li>Permits or licenses</li>
+                        <li>Contingency buffer (usually 5-10%)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Estimation Calculator -->
+        <div class="calculator-section">
+       
+                </div>
+                
+             
+    
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>About Eventective</h3>
+                <ul class="footer-links">
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Our Story</a></li>
+                    <li><a href="#">Testimonials</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Careers</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>For Vendors</h3>
+                <ul class="footer-links">
+                    <li><a href="#">List Your Business</a></li>
+                    <li><a href="#">Vendor Login</a></li>
+                    <li><a href="#">Success Stories</a></li>
+                    <li><a href="#">Pricing</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>For Event Planners</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Find Venues</a></li>
+                    <li><a href="#">Find Vendors</a></li>
+                    <li><a href="#">Request Quotes</a></li>
+                    <li><a href="#">Planning Tools</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Support</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Help Center</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="copyright">
+            &copy; 2025 Eventective. All rights reserved.
+        </div>
+    </footer>
+    
+   

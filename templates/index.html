@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Mood Board Generator</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #333;
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+        }
+        .container {
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            height: 150px;
+            margin-bottom: 20px;
+            font-family: inherit;
+            font-size: 16px;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            display: block;
+            margin: 0 auto;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        button:disabled {
+            background-color: #95a5a6;
+            cursor: not-allowed;
+        }
+        .result {
+            margin-top: 30px;
+            text-align: center;
+        }
+        .mood-board {
+            max-width: 100%;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            margin-top: 20px;
+        }
+        .loading {
+            text-align: center;
+            margin-top: 20px;
+            display: none;
+        }
+        .loading-spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 2s linear infinite;
+            margin: 0 auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .error {
+            color: #e74c3c;
+            text-align: center;
+            margin-top: 20px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Event Mood Board Generator</h1>
+        
+        <div>
+            <label for="themeDescription">Describe your event theme and desired mood:</label>
+            <textarea id="themeDescription" placeholder="E.g., A rustic autumn wedding with warm earth tones, wooden elements, and a cozy, intimate atmosphere. The event should feel warm and inviting with touches of burgundy, orange, and golden colors..."></textarea>
+        </div>
+        
+        <button id="generateBtn">Generate Mood Board</button>
+        
+        <div class="loading" id="loading">
+            <div class="loading-spinner"></div>
+            <p>Generating your mood board. This may take a moment...</p>
+        </div>
+        
+        <div class="error" id="error">
+            <p>Sorry, we couldn't generate your mood board. Please try again.</p>
+        </div>
+        
+        <div class="result" id="result">
+            <h2>Your Event Mood Board</h2>
+            <img id="moodBoardImage" class="mood-board" alt="Generated mood board" />
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const themeInput = document.getElementById('themeDescription');
+            const generateBtn = document.getElementById('generateBtn');
+            const loadingDiv = document.getElementById('loading');
+            const resultDiv = document.getElementById('result');
+            const errorDiv = document.getElementById('error');
+            const moodBoardImage = document.getElementById('moodBoardImage');
+            
+            // Hide the result section initially
+            resultDiv.style.display = 'none';
+            
+            generateBtn.addEventListener('click', async function() {
+                const themeDescription = themeInput.value.trim();
+                
+                if (!themeDescription) {
+                    alert('Please enter a theme description');
+                    return;
+                }
+                
+                // Show loading, hide previous results
+                loadingDiv.style.display = 'block';
+                resultDiv.style.display = 'none';
+                errorDiv.style.display = 'none';
+                generateBtn.disabled = true;
+                
+                try {
+                    const response = await fetch('/generate', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ themeDescription })
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (data.error) {
+                        throw new Error(data.error);
+                    }
+                    
+                    // Display the generated mood board
+                    moodBoardImage.src = data.moodBoardImageUrl;
+                    resultDiv.style.display = 'block';
+                } catch (error) {
+                    console.error('Error:', error);
+                    errorDiv.style.display = 'block';
+                } finally {
+                    loadingDiv.style.display = 'none';
+                    generateBtn.disabled = false;
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event-Estimation - Plan The Perfect Event</title>
+    <style>
+        :root {
+            --primary-color: #2d4654;
+            --secondary-color: #56b1bf;
+            --accent-orange: #e78d5e;
+            --accent-purple: #a66e98;
+            --accent-green: #8bc34a;
+            --light-gray: #f5f5f5;
+            --white: #ffffff;
+            --dark-text: #1d2731;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            overflow-x: hidden;
+        }
+        
+        /* Header & Navigation */
+        header {
+            background-color: var(--primary-color);
+            padding: 1rem 0;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo img {
+            height: 50px;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 1.5rem;
+        }
+        
+        .nav-links a {
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--secondary-color);
+        }
+        
+        .search-btn {
+            background-color: var(--white);
+            border: none;
+            padding: 0.5rem 1.5rem;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        /* Hero Section */
+        .hero {
+            height: 70vh;
+            position: relative;
+            overflow: hidden;
+            background-color: rgba(0, 0, 0, 0.3);
+        }
+        
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('/api/placeholder/1200/800');
+            background-size: cover;
+            background-position: center;
+            animation: slideBg 20s infinite alternate;
+            z-index: -1;
+        }
+        
+        @keyframes slideBg {
+            0%, 100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.8;
+                transform: scale(1.05);
+            }
+        }
+        
+        .hero-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            text-align: center;
+            color: var(--white);
+            padding: 0 1rem;
+           background-image: url("{{ url_for('static', filename='images/images1.jpg') }}");
+        }
+        
+        .hero-content h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+        }
+        
+        .hero-content p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin-bottom: 2rem;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+            line-height: 1.6;
+        }
+        
+        /* Event Type Tabs */
+        .event-tabs {
+            display: flex;
+            width: 80%;
+            max-width: 1000px;
+            margin: -2rem auto 0;
+            position: relative;
+            z-index: 5;
+        }
+        
+        .event-tab {
+            flex: 1;
+            padding: 1.5rem;
+            text-align: center;
+            color: var(--white);
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .tab-wedding {
+            background-color: #2d4654;
+            border-top-left-radius: 5px;
+        }
+        
+        .tab-party {
+            background-color: #2d4654;
+        }
+        
+        .tab-meeting {
+            background-color: #2d4654;
+            border-top-right-radius: 5px;
+        }
+        
+        .tab-wedding.active {
+            color: black;
+            background-color: white;
+        }
+        
+        .tab-party.active {
+            color: black;
+            background-color: white;
+        }
+        
+        .tab-meeting.active {
+            color: black;
+            background-color:white;
+        }
+        
+        .event-tab span {
+            margin-right: 0.5rem;
+        }
+        
+        /* Search Container */
+        .search-container {
+            background-color: var(--white);
+            padding: 2rem;
+            border-bottom-left-radius: 5px;
+            border-bottom-right-radius: 5px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 1000px;
+            margin: 0 auto;
+            display: flex;
+        }
+        
+        .search-input {
+            flex: 1;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        
+        .search-button {
+            background-color: var(--secondary-color);
+            color: var(--white);
+            border: none;
+            padding: 0.8rem 1.5rem;
+            margin-left: 1rem;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .search-button:hover {
+            background-color: #4a9da9;
+        }
+        
+        /* Website Builder Section */
+        .website-builder {
+            padding: 4rem 0;
+            background-color: #f0f3f5;
+            text-align: center;
+        }
+        
+        .builder-container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .builder-container h2 {
+            font-size: 2.5rem;
+            color: var(--dark-text);
+            margin-bottom: 1rem;
+        }
+        
+        .builder-container p {
+            font-size: 1.1rem;
+            color: #555;
+            max-width: 800px;
+            margin: 0 auto 2rem;
+            line-height: 1.6;
+        }
+        
+        .website-options {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        
+        .website-option {
+            flex: 1;
+            padding: 2rem;
+            color: var(--white);
+            border-radius: 5px;
+            transition: transform 0.3s;
+        }
+        
+        .website-option:hover {
+            transform: translateY(-10px);
+        }
+        
+        .website-option h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .option-party {
+            background-color: #a57c9b;
+        }
+        
+        .option-wedding {
+            background-color: #ebc0aa;
+        }
+        
+        .option-meeting {
+            background-color: #90a973;
+        }
+        
+        .icon-circle {
+            background-color: rgba(255, 255, 255, 0.2);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+        }
+        
+        /* Vendors Section */
+        .vendors {
+            padding: 4rem 0;
+            background-color: var(--white);
+        }
+        
+        .vendors-container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .vendors-container h2 {
+            font-size: 2.5rem;
+            color: var(--dark-text);
+            margin-bottom: 1rem;
+        }
+        
+        .vendors-container p {
+            font-size: 1.1rem;
+            color: #555;
+            max-width: 800px;
+            margin: 0 auto 2rem;
+        }
+        
+        .vendor-categories {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .vendor-category {
+            border: 1px solid #e0e0e0;
+            padding: 2rem;
+            border-radius: 5px;
+            transition: box-shadow 0.3s;
+        }
+        
+        .vendor-category:hover {
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .vendor-icon {
+            width: 80px;
+            height: 80px;
+            background-color: var(--primary-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+        }
+        
+        .vendor-icon svg {
+            width: 40px;
+            height: 40px;
+            fill: var(--white);
+        }
+        
+        .vendor-category h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--dark-text);
+        }
+        
+        .vendor-category p {
+            font-size: 0.9rem;
+            color: #777;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--primary-color);
+            color: var(--white);
+            padding: 3rem 0;
+        }
+        
+        .footer-container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+        }
+        
+        .footer-logo img {
+            height: 40px;
+            margin-bottom: 1rem;
+        }
+        
+        .footer-section h4 {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+        
+        .footer-section h4::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 2px;
+            background-color: var(--secondary-color);
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .footer-links a {
+            color: #ccc;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: var(--white);
+        }
+        
+        .footer-bottom {
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+            
+            .website-options,
+            .vendor-categories {
+                flex-direction: column;
+                grid-template-columns: 1fr;
+            }
+            
+            .search-container {
+                flex-direction: column;
+                width: 90%;
+            }
+            
+            .search-button {
+                margin-left: 0;
+                margin-top: 1rem;
+            }
+            
+            .footer-container {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .event-tabs {
+                flex-direction: column;
+                width: 90%;
+            }
+            
+            .event-tab {
+                border-radius: 0;
+            }
+            
+            .tab-wedding {
+                border-top-left-radius: 5px;
+                border-top-right-radius: 5px;
+            }
+            
+            .tab-meeting {
+                border-radius: 0;
+            }
+            
+            .footer-container {
+                grid-template-columns: 1fr;
+            }
+        }
+ .search-btn {
+    background: linear-gradient(135deg, #56b1bf, #3a8a96); /* Gradient background */
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    font-size: 18px;
+    font-weight: 700;
+    border-radius: 30px;
+    cursor: pointer;
+    box-shadow: 0 6px 15px rgba(86, 177, 191, 0.6);
+    transition: 
+        background 0.4s ease,
+        box-shadow 0.3s ease,
+        transform 0.2s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Hover glow + subtle lift */
+.search-btn:hover {
+    background: linear-gradient(135deg, #3a8a96, #56b1bf);
+    box-shadow: 0 10px 20px rgba(86, 177, 191, 0.9);
+    transform: translateY(-3px);
+}
+
+/* Pressed effect */
+.search-btn:active {
+    background: linear-gradient(135deg, #2e6d75, #3a8a96);
+    box-shadow: 0 4px 8px rgba(46, 109, 117, 0.7);
+    transform: translateY(1px);
+}
+
+/* Ripple effect on click */
+.search-btn::after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0; left: 0;
+    pointer-events: none;
+    background: radial-gradient(circle, rgba(255,255,255,0.4) 10%, transparent 10.01%);
+    background-repeat: no-repeat;
+    background-position: 50%;
+    transform: scale(10);
+    opacity: 0;
+    transition: transform 0.5s, opacity 1s;
+    border-radius: 30px;
+}
+
+.search-btn:focus::after,
+.search-btn:active::after {
+    transform: scale(0);
+    opacity: 1;
+    transition: 0s;
+}
+  li a {
+      padding: 10px 15px;
+      text-decoration: none;
+      color: #333;
+      margin-right: 10px;
+    }
+
+    /* Unique style for DreamForge AI only */
+    li a[href="/aigenerate"] {
+      background: linear-gradient(135deg, #7b1fa2, #e040fb);
+      color: #fff;
+      font-weight: bold;
+      border-radius: 30px;
+      box-shadow: 0 0 15px rgba(224, 64, 251, 0.5);
+      animation: pulse 2s infinite;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    li a[href="/aigenerate"]:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px rgba(224, 64, 251, 0.7);
+    }
+
+    @keyframes pulse {
+      0% { box-shadow: 0 0 15px rgba(224, 64, 251, 0.5); }
+      50% { box-shadow: 0 0 25px rgba(224, 64, 251, 0.9); }
+      100% { box-shadow: 0 0 15px rgba(224, 64, 251, 0.5); }
+    }
+
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="nav-container">
+            <div class="logo">
+                <a href="#">
+                    <svg width="180" height="50" viewBox="0 0 180 50">
+                        <circle cx="25" cy="25" r="23" fill="#56b1bf" />
+                        <text x="65" y="33" fill="white" font-size="24" font-weight="bold">Event</text>
+                    </svg>
+                </a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="/eventtypes">Party</a></li>
+                <li><a href="/eventtypes">Wedding</a></li>
+                <li><a href="/eventtypes">Meeting</a></li>
+                <li><a href="/Estimation">Estimation</a></li>
+                 <li><a href="/aigenerate">🤖 DreamForge AI</a></li>
+            </ul>
+            
+           <a href="/getdemo">
+  <button class="search-btn">Get AI Demo</button>
+</a>
+
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-content">
+           
+            <h1>Plan The Perfect Event</h1>
+            <p>EventEstimation is the most comprehensive resource to help you plan your event. Find your Wedding, Party, or Meeting venue now.</p>
+            
+        </div>
+    </section>
+
+    <!-- Event Tabs -->
+    <div class="event-tabs">
+        <div class="event-tab tab-wedding">
+            <span>💍</span> Wedding
+        </div>
+        <div class="event-tab tab-party active">
+            <span>🎁</span> Party
+        </div>
+        <div class="event-tab tab-meeting">
+            <span>🤝</span> Meeting
+        </div>
+    </div>
+
+    <!-- Search Container -->
+    <div class="search-container">
+        
+    </div>
+
+    <!-- Website Builder Section -->
+    <section class="website-builder">
+        <div class="builder-container">
+            <h2>Build Your Event Website</h2>
+            <p>Start Your Free Website Today & Start Planning Your Perfect Event! When you sign up with Eventective, you have access to a whole array of planning tools.</p>
+            
+            <div class="website-options">
+                <div class="website-option option-party">
+                    <div class="icon-circle">🎁</div>
+                    <h3>Party Website</h3>
+                </div>
+                <div class="website-option option-wedding">
+                    <div class="icon-circle">🎂</div>
+                    <h3>Wedding Website</h3>
+                </div>
+                <div class="website-option option-meeting">
+                    <div class="icon-circle">🤝</div>
+                    <h3>Meeting Website</h3>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Vendors Section -->
+    <section class="vendors">
+        <div class="vendors-container">
+            <h2>Our Vendors</h2>
+            <p>Eventective has the venues and vendors you need to have your perfect event</p>
+            
+            <div class="vendor-categories">
+                <div class="vendor-category">
+                    <div class="vendor-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
+                            <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
+                            <line x1="6" y1="1" x2="6" y2="4"></line>
+                            <line x1="10" y1="1" x2="10" y2="4"></line>
+                            <line x1="14" y1="1" x2="14" y2="4"></line>
+                        </svg>
+                    </div>
+                    <h3>Wedding Venues</h3>
+                    <p>Wedding, Reception, Ceremony, Marriage</p>
+                </div>
+                <div class="vendor-category">
+                    <div class="vendor-icon">
+                        <svg viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <path d="M8.56 2.9A7 7 0 0 1 19 9.9"></path>
+                            <path d="M12 7v5l3 3"></path>
+                        </svg>
+                    </div>
+                    <h3>Party Venues</h3>
+                    <p>Birthday, Reunion, Bridal, Anniversary, Bar Mitzvah Party</p>
+                </div>
+                <div class="vendor-category">
+                    <div class="vendor-icon">
+                        <svg viewBox="0 0 24 24">
+                            <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                        </svg>
+                    </div>
+                    <h3>Meeting Venues</h3>
+                    <p>Banquets, Corporate Events, Conferences, Seminar, Convention</p>
+                </div>
+                <div class="vendor-category">
+                    <div class="vendor-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
+                            <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
+                            <line x1="6" y1="1" x2="6" y2="4"></line>
+                            <line x1="10" y1="1" x2="10" y2="4"></line>
+                            <line x1="14" y1="1" x2="14" y2="4"></line>
+                        </svg>
+                    </div>
+                    <h3>Caterers</h3>
+                    <p>Wedding, Corporate, Food Caterer</p>
+                </div>
+                <div class="vendor-category">
+                    <div class="vendor-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                            <circle cx="12" cy="13" r="4"></circle>
+                        </svg>
+                    </div>
+                    <h3>Photographers</h3>
+                    <p>Digital, Professional, Special Event Photographer</p>
+                </div>
+                <div class="vendor-category">
+                    <div class="vendor-icon">
+                        <svg viewBox="0 0 24 24">
+                            <rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect>
+                            <circle cx="12" cy="14" r="4"></circle>
+                            <line x1="12" y1="6" x2="12" y2="6"></line>
+                        </svg>
+                    </div>
+                    <h3>DJs</h3>
+                    <p>Disc Jockey, Music</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-section">
+                <div class="footer-logo">
+                    <svg width="150" height="40" viewBox="0 0 150 40">
+                        <circle cx="20" cy="20" r="18" fill="#56b1bf" />
+                        <text x="45" y="25" fill="white" font-size="18" font-weight="bold">eventective</text>
+                    </svg>
+                </div>
+                <p>Find the perfect venue, vendor, and create beautiful event websites.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <ul class="footer-links">
+                    <li><a href="/home">Home</a></li>
+             
+                         <li><a href="/eventtype">Banquets</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Event Types</h4>
+                <ul class="footer-links">
+                    <li><a href="/eventtype">Weddings</a></li>
+                    <li><a href="/eventtype">Parties</a></li>
+                 
+                  
+                </ul>
+            </div>
+            <div class="footer-section">
+                
+                <ul class="footer-links">
+                  
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Eventective. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Simple JavaScript for tab functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabs = document.querySelectorAll('.event-tab');
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // Remove active class from all tabs
+                    tabs.forEach(t => t.classList.remove('active'));
+                    // Add active class to clicked tab
+                    this.classList.add('active');
+                });
+            });
+
+            // Simulate background image slider
+            const heroBg = document.querySelector('.hero-bg');
+            let bgImages = [
+                '/api/placeholder/1200/800',
+                '/api/placeholder/1200/801',
+                '/api/placeholder/1200/802'
+            ];
+            
+            let currentBg = 0;
+            
+            setInterval(() => {
+                currentBg = (currentBg + 1) % bgImages.length;
+                heroBg.style.backgroundImage = `url(${bgImages[currentBg]})`;
+                heroBg.style.transition = 'opacity 1s ease-in-out';
+            }, 5000);
+        });
+    </script>
+</body>
+</html>

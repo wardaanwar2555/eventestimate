@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Cheat AI Image Generator</title>
+</head>
+<body>
+  <h1>Text to Image Generator</h1>
+  <form id="imageForm">
+    <input type="text" id="prompt" placeholder="Enter your prompt..." required>
+    <button type="submit">Generate Image</button>
+  </form>
+
+  <script>
+    document.getElementById("imageForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const prompt = document.getElementById("prompt").value;
+      const url = "https://www.bing.com/images/create?q=" + encodeURIComponent(prompt);
+      window.open(url, "_blank");
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Types - Eventective</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+        }
+        
+        /* Header Styles */
+        header {
+            background-color: #2d4654;
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+        
+        .nav-menu {
+            display: flex;
+            gap: 1.5rem;
+        }
+        
+        .nav-item {
+            color: white;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        
+        /* Hero Header Section */
+        .hero-header {
+            background-image: linear-gradient(#29616a, #1b3b40), url('/api/placeholder/1200/400');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+        
+        .hero-title {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .hero-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+        
+        .hero-btn {
+            background-color: #F7941D;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            font-size: 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        
+        .hero-btn.transparent {
+            background-color: transparent;
+            border: 2px solid white;
+        }
+        
+        .hero-btn:hover {
+            opacity: 0.9;
+        }
+        
+        /* Main Content Styles */
+        .main-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        
+        .page-title {
+            text-align: center;
+            font-size: 2.5rem;
+            color: #0c2340;
+            margin-bottom: 1rem;
+        }
+        
+        .page-subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 3rem;
+        }
+        
+        .event-types-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .event-type-card {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .event-type-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .event-icon {
+            background-color: #0c2340;
+            padding: 2rem;
+            display: flex;
+            justify-content: center;
+        }
+        
+        .event-icon img {
+            width: 80px;
+            height: 80px;
+            background-color: white;
+            border-radius: 50%;
+            padding: 15px;
+        }
+        
+        .event-details {
+            padding: 1.5rem;
+        }
+        
+        .event-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #0c2340;
+        }
+        
+        .event-description {
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        /* Form Styles */
+        .quote-form {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 3rem;
+        }
+        
+        .form-title {
+            text-align: center;
+            font-size: 1.8rem;
+            color: #0c2340;
+            margin-bottom: 2rem;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group {
+            flex: 1;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        
+        .submit-btn {
+            background-color: #F7941D;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            display: block;
+            margin: 0 auto;
+            width: 100%;
+            max-width: 300px;
+        }
+        
+        .submit-btn:hover {
+            background-color: #e67e00;
+        }
+        
+        /* Footer Styles */
+        footer {
+            background-color: #2d4654;
+            color: white;
+            padding: 2rem;
+            margin-top: 4rem;
+        }
+        
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+        
+        .footer-section h3 {
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+        
+        .footer-links a {
+            color: #ddd;
+            text-decoration: none;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+            text-decoration: underline;
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 2rem;
+            margin-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Sidebar Tools */
+        .side-tools {
+            position: fixed;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .tool-btn {
+            width: 40px;
+            height: 40px;
+            background-color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            cursor: pointer;
+        }
+        .form-nav-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.nav-btn {
+    background-color: #e67e00; /* Green */
+    color: white;
+    padding: 12px 24px;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+
+.nav-item a {
+    text-decoration: none;        /* ✅ removes underline */
+    color: #f5f2f2;
+    font-size: 16px;
+    transition: color 0.3s ease;
+}
+
+.nav-item a:hover {
+    color: #6392b9; /* Hover effect: green text */
+}
+
+nav-menu {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+/* Standard nav links */
+.nav-item a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 16px;
+  padding: 6px 12px;
+  transition: color 0.3s;
+}
+
+.nav-item a:hover {
+  color: #56b1bf;
+}
+
+/* Special DreamForge AI item */
+.nav-special {
+  list-style: none;
+}
+
+.ai-special {
+  background: linear-gradient(135deg, #7b1fa2, #e040fb);
+  color: white;
+  font-weight: bold;
+  padding: 8px 16px;
+  border-radius: 30px;
+  text-decoration: none;
+  box-shadow: 0 0 10px rgba(224, 64, 251, 0.5);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.ai-special:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 15px rgba(224, 64, 251, 0.8);
+}
+
+/* Get AI Demo button */
+.search-btn {
+  background-color: #56b1bf;
+  color: #fff;
+  border: none;
+  padding: 10px 18px;
+  font-size: 14px;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.search-btn:hover {
+  background-color: #3a92a1;
+}
+
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="logo">Event</div>
+        <div class="nav-menu">
+           <div class="nav-item"><a href="/">Home</a></div>
+
+<div class="nav-item"><a href="/Estimation">Estimation</a></div>
+<div class="nav-item"><a href="/About"></a></div>
+ 
+            </ul>
+            
+           
+
+        </div>
+    </header>
+    
+    <!-- Hero Header Section -->
+    <section class="hero-header">
+        <h1 class="hero-title">Make Your Event Unforgettable</h1>
+        <p class="hero-subtitle">Find the perfect venues and vendors for your special occasions. From weddings to corporate events, we have everything you need to create memorable experiences.</p>
+        <div class="hero-buttons">
+            <a href="#" class="hero-btn">Find Venues</a>
+            <a href="#" class="hero-btn transparent">Browse Vendors</a>
+        </div>
+    </section>
+    
+    <!-- Main Content -->
+    <div class="main-container">
+        <h1 class="page-title">Our Party Vendors</h1>
+        <p class="page-subtitle">Eventective has the venues and vendors you need to have your perfect party</p>
+        
+        <div class="event-types-grid">
+            <!-- Event Type Card 1 -->
+            <div class="event-type-card">
+                <div class="event-icon">
+                   <img src="{{ url_for('static', filename='images/download.png') }}" alt="Download Image" width="400">
+                </div>
+                <div class="event-details">
+                    <h2 class="event-title">Party Venues</h2>
+                    <p class="event-description">Birthday, Reunion, Bridal, Anniversary, Bar Mitzvah Party</p>
+                </div>
+            </div>
+            
+            <!-- Event Type Card 2 -->
+            <div class="event-type-card">
+                <div class="event-icon">
+                 <img src="{{ url_for('static', filename='images/images2.jpg') }}" alt="Download Image" width="400">
+                </div>
+                <div class="event-details">
+                    <h2 class="event-title">Caterers</h2>
+                    <p class="event-description">Wedding, Corporate, Food Caterer</p>
+                </div>
+            </div>
+            
+            <!-- Event Type Card 3 -->
+            <div class="event-type-card">
+                <div class="event-icon">
+                 <img src="{{ url_for('static', filename='images/images3.png') }}" alt="Download Image" width="400">
+                </div>
+                <div class="event-details">
+                    <h2 class="event-title">Photographers</h2>
+                    <p class="event-description">Digital, Professional, Special Event Photographer</p>
+                </div>
+            </div>
+            
+            <!-- Event Type Card 4 -->
+            <div class="event-type-card">
+                <div class="event-icon">
+               <img src="{{ url_for('static', filename='images/images4.png') }}" alt="Download Image" width="400">
+                </div>
+                <div class="event-details">
+                    <h2 class="event-title">DJs</h2>
+                    <p class="event-description">Disc Jockey, Music</p>
+                </div>
+            </div>
+            
+            <!-- Event Type Card 5 -->
+            <div class="event-type-card">
+                <div class="event-icon">
+                  <img src="{{ url_for('static', filename='images/images5.jpg') }}" alt="Download Image" width="400">
+                </div>
+                <div class="event-details">
+                    <h2 class="event-title">Live Musicians</h2>
+                    <p class="event-description">Wedding Music, Concerts, Live Bands</p>
+                </div>
+            </div>
+            
+            <!-- Event Type Card 6 -->
+            <div class="event-type-card">
+                <div class="event-icon">
+                 <img src="{{ url_for('static', filename='images/images6.png') }}" alt="Download Image" width="400">
+                </div>
+                <div class="event-details">
+                    <h2 class="event-title">Videographers</h2>
+                    <p class="event-description">Professional, Wedding, Digital Videography</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Quote Form -->
+        <div class="quote-form">
+            <h2 class="form-title">Request a Free Quote</h2>
+            <p style="text-align: center; margin-bottom: 2rem;">Planning a party can be an intimidating experience! Let us help you navigate the planning process.</p>
+            
+            <!-- Progress Bar -->
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="quote-progress-bar"></div>
+            </div>
+            
+            <!-- Step 1: Business Types -->
+            <div class="form-step" id="step1">
+                <h3 class="step-title">Which types of businesses would you like to receive free quotes from?</h3>
+                
+                <div class="checkbox-list">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="venues" name="business_type" value="Venues" checked>
+                        <label for="venues">Venues</label>
+                    </div>
+                    
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="caterers" name="business_type" value="Caterers">
+                        <label for="caterers">Caterers</label>
+                    </div>
+                    
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="djs" name="business_type" value="DJs">
+                        <label for="djs">DJs</label>
+                    </div>
+                    
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="photographers" name="business_type" value="Photographers">
+                        <label for="photographers">Photographers</label>
+                    </div>
+                    
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="event-planners" name="business_type" value="Event Planners">
+                        <label for="event-planners">Event Planners</label>
+                    </div>
+                    
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="supplies-rentals" name="business_type" value="Supplies + Rentals">
+                        <label for="supplies-rentals">Supplies + Rentals</label>
+                    </div>
+                </div>
+                
+                <div class="form-nav-buttons">
+                    <button class="nav-btn next-btn" onclick="nextStep(1)">Next ></button>
+                </div>
+            </div>
+            
+            <!-- Step 2: Budget -->
+            <div class="form-step" id="step2" style="display: none;">
+                <h3 class="step-title">What is your budget for the following services?</h3>
+                
+                <div class="budget-section">
+                    <h4>Venue Budget</h4>
+                    
+                    <div class="radio-list">
+                        <div class="radio-item">
+                            <input type="radio" id="flexible" name="venue_budget" value="Flexible">
+                            <label for="flexible">Flexible</label>
+                        </div>
+                        
+                        <div class="radio-item">
+                            <input type="radio" id="over-10000" name="venue_budget" value="Over $10000">
+                            <label for="over-10000">Over $10000</label>
+                        </div>
+                        
+                        <div class="radio-item">
+                            <input type="radio" id="5000-10000" name="venue_budget" value="$5000 - $10000">
+                            <label for="5000-10000">$5000 - $10000</label>
+                        </div>
+                        
+                        <div class="radio-item">
+                            <input type="radio" id="2500-5000" name="venue_budget" value="$2500 - $5000">
+                            <label for="2500-5000">$2500 - $5000</label>
+                        </div>
+                        
+                        <div class="radio-item">
+                            <input type="radio" id="2000-2500" name="venue_budget" value="$2000 - $2500">
+                            <label for="2000-2500">$2000 - $2500</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-nav-buttons">
+                    <button class="nav-btn back-btn" onclick="prevStep(2)">< Back</button>
+                    <button class="nav-btn next-btn" onclick="nextStep(2)">Next ></button>
+                </div>
+            </div>
+            
+            <!-- Step 3: Start Time -->
+            <div class="form-step" id="step3" style="display: none;">
+                <h3 class="step-title">What is the approximate start time of your event?</h3>
+                
+                <div class="radio-list">
+                    <div class="radio-item">
+                        <input type="radio" id="dont-know" name="start_time" value="I don't know" checked>
+                        <label for="dont-know">I don't know</label>
+                    </div>
+                    
+                    <div class="radio-item">
+                        <input type="radio" id="12-00pm" name="start_time" value="12:00PM">
+                        <label for="12-00pm">12:00PM</label>
+                    </div>
+                    
+                    <div class="radio-item">
+                        <input type="radio" id="12-30pm" name="start_time" value="12:30PM">
+                        <label for="12-30pm">12:30PM</label>
+                    </div>
+                    
+                    <div class="radio-item">
+                        <input type="radio" id="1-00pm" name="start_time" value="1:00PM">
+                        <label for="1-00pm">1:00PM</label>
+                    </div>
+                    
+                    <div class="radio-item">
+                        <input type="radio" id="1-30pm" name="start_time" value="1:30PM">
+                        <label for="1-30pm">1:30PM</label>
+                    </div>
+                    
+                    <div class="radio-item">
+                        <input type="radio" id="2-00pm" name="start_time" value="2:00PM">
+                        <label for="2-00pm">2:00PM</label>
+                    </div>
+                </div>
+                
+                <div class="form-nav-buttons">
+                    <button class="nav-btn back-btn" onclick="prevStep(3)">< Back</button>
+                    <button class="nav-btn next-btn" onclick="nextStep(3)">Next ></button>
+                </div>
+            </div>
+            
+            <!-- Step 4: Contact Information -->
+            <div class="form-step" id="step4" style="display: none;">
+                <h3 class="step-title">Your Contact Information</h3>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="fullname">Full Name</label>
+                        <input type="text" id="fullname" class="form-control" placeholder="Your Name">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" class="form-control" placeholder="your@email.com">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" class="form-control" placeholder="(555) 555-5555">
+                    </div>
+                </div>
+                
+                <div class="form-nav-buttons">
+                    <button class="nav-btn back-btn" onclick="prevStep(4)">< Back</button>
+                    <button class="submit-btn" onclick="submitForm()">Get Free Quote</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>About Eventective</h3>
+                <ul class="footer-links">
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Our Story</a></li>
+                    <li><a href="#">Testimonials</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Careers</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>For Vendors</h3>
+                <ul class="footer-links">
+                    <li><a href="#">List Your Business</a></li>
+                    <li><a href="#">Vendor Login</a></li>
+                    <li><a href="#">Success Stories</a></li>
+                    <li><a href="#">Pricing</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>For Event Planners</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Find Venues</a></li>
+                    <li><a href="#">Find Vendors</a></li>
+                    <li><a href="#">Request Quotes</a></li>
+                    <li><a href="#">Planning Tools</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Support</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Help Center</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="copyright">
+            &copy; 2025 Eventective. All rights reserved.
+        </div>
+    </footer>
+    
+    <script>
+        // Variables to track the current step
+        let currentStep = 1;
+        const totalSteps = 4;
+        
+        // Function to update the progress bar
+        function updateProgressBar() {
+            const progressPercentage = (currentStep / totalSteps) * 100;
+            document.getElementById('quote-progress-bar').style.width = `${progressPercentage}%`;
+        }
+        
+        // Function to move to the next step
+        function nextStep(step) {
+            // Hide current step
+            document.getElementById(`step${step}`).style.display = 'none';
+            
+            // Show next step
+            document.getElementById(`step${step + 1}`).style.display = 'block';
+            
+            // Update current step
+            currentStep = step + 1;
+            
+            // Update progress bar
+            updateProgressBar();
+        }
+        
+        // Function to move to the previous step
+        function prevStep(step) {
+            // Hide current step
+            document.getElementById(`step${step}`).style.display = 'none';
+            
+            // Show previous step
+            document.getElementById(`step${step - 1}`).style.display = 'block';
+            
+            // Update current step
+            currentStep = step - 1;
+            
+            // Update progress bar
+            updateProgressBar();
+        }
+        
+        // Function to handle form submission
+        function submitForm() {
+            // Collect all form data
+            const businessTypes = Array.from(document.querySelectorAll('input[name="business_type"]:checked'))
+                .map(checkbox => checkbox.value);
+                
+            const venueBudget = document.querySelector('input[name="venue_budget"]:checked')?.value || '';
+            const startTime = document.querySelector('input[name="start_time"]:checked')?.value || '';
+            
+            const fullName = document.getElementById('fullname').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            
+            // Log form data (in a real app, you would send this to a server)
+            console.log({
+                businessTypes,
+                venueBudget,
+                startTime,
+                fullName,
+                email,
+                phone
+            });
+            
+            // Show confirmation message
+            alert('Thank you! Your quote request has been submitted. We will contact you shortly.');
+            
+            // Reset form and go back to first step
+            resetForm();
+        }
+        
+        // Function to reset the form
+        function resetForm() {
+            // Hide all steps except the first one
+            for (let i = 2; i <= totalSteps; i++) {
+                document.getElementById(`step${i}`).style.display = 'none';
+            }
+            
+            // Show first step
+            document.getElementById('step1').style.display = 'block';
+            
+            // Reset current step
+            currentStep = 1;
+            
+            // Update progress bar
+            updateProgressBar();
+            
+            // Reset form fields (optionally)
+            document.querySelectorAll('input[type="text"], input[type="email"], input[type="tel"]').forEach(input => {
+                input.value = '';
+            });
+        }
+        
+        // Initialize the form
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set initial progress bar
+            updateProgressBar();
+        });
+    </script>
+    
+    <!-- Side Tools -->
+    <div class="side-tools">
+        <div class="tool-btn">📷</div>
+        <div class="tool-btn">🎥</div>
+        <div class="tool-btn">📋</div>
+        <div class="tool-btn">⚙️</div>
+    </div>
+</body>
+</html>

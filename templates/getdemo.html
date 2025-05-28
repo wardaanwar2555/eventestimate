@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Event Budget AI</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #8b5cf6;
+            --accent: #c084fc;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --success: #22c55e;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f0f4fd 0%, #e2e8f0 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            padding: 40px 0;
+            color: var(--dark);
+        }
+        
+        .container {
+            max-width: 850px;
+        }
+        
+        .app-container {
+            background-color: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            padding: 35px;
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .app-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
+        }
+        
+        h1 {
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 30px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: var(--primary);
+            border-radius: 2px;
+        }
+        
+        .ai-badge {
+            background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            display: inline-block;
+            margin-left: 12px;
+            vertical-align: middle;
+        }
+        
+        .form-control, .form-select {
+            border-radius: 8px;
+            padding: 12px 16px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+        }
+        
+        .form-label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #475569;
+        }
+        
+        .input-group-text {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px 0 0 8px;
+            padding-left: 16px;
+            padding-right: 16px;
+            color: #64748b;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+            border: none;
+            border-radius: 8px;
+            padding: 12px 24px;
+            font-weight: 600;
+            box-shadow: 0 4px 6px rgba(99, 102, 241, 0.15);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(90deg, var(--primary-dark) 0%, var(--secondary) 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 8px rgba(99, 102, 241, 0.2);
+        }
+        
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+        
+        .result-container {
+            margin-top: 30px;
+            padding: 25px;
+            border-radius: 12px;
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            position: relative;
+        }
+        
+        .result-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .result-header i {
+            font-size: 20px;
+            color: var(--primary);
+            margin-right: 12px;
+        }
+        
+        .total-budget {
+            font-size: 28px;
+            color: var(--success);
+            font-weight: 700;
+            padding: 16px;
+            background-color: #f0fdf4;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 25px;
+            border: 1px solid #dcfce7;
+        }
+        
+        .cost-breakdown {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+        
+        .cost-breakdown h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #334155;
+        }
+        
+        .cost-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        
+        .cost-item:last-child {
+            border-bottom: none;
+        }
+        
+        .cost-label {
+            font-weight: 500;
+            color: #334155;
+        }
+        
+        .cost-value {
+            font-weight: 600;
+            color: #0f172a;
+        }
+        
+        .btn-secondary {
+            background-color: #f1f5f9;
+            border: none;
+            color: #475569;
+            font-weight: 600;
+            border-radius: 8px;
+            padding: 10px 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #e2e8f0;
+            color: #334155;
+        }
+        
+        .animated-gradient {
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+            height: 8px;
+            width: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        
+        @keyframes gradient {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+        
+        .feature-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+        }
+        
+        .feature-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 20px;
+            flex-shrink: 0;
+        }
+        
+        .feature-icon i {
+            color: white;
+            font-size: 24px;
+        }
+        
+        .feature-content h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .feature-content p {
+            color: #64748b;
+            margin-bottom: 0;
+        }
+        
+        .typewriter-container {
+            height: 60px;
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .typewriter-text {
+            overflow: hidden;
+            border-right: 3px solid var(--primary);
+            white-space: nowrap;
+            font-size: 18px;
+            font-weight: 500;
+            color: #334155;
+            animation: typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite;
+        }
+        
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+        
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: var(--primary) }
+        }
+        
+        .ai-thinking {
+            display: none;
+            align-items: center;
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f8fafc;
+            border-radius: 8px;
+        }
+        
+        .ai-thinking-text {
+            margin-right: 10px;
+            font-weight: 500;
+            color: #64748b;
+        }
+        
+        .thinking-dots {
+            display: flex;
+            align-items: center;
+        }
+        
+        .thinking-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            margin: 0 3px;
+            animation: dot-pulse 1.5s infinite ease-in-out;
+        }
+        
+        .thinking-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        
+        .thinking-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        
+        @keyframes dot-pulse {
+            0%, 100% {
+                transform: scale(0.7);
+                opacity: 0.5;
+            }
+            50% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="app-container">
+            <div class="animated-gradient"></div>
+            <div class="text-center mb-4">
+                <h1>Event Budget AI <span class="ai-badge"><i class="fas fa-robot me-1"></i>Powered by ML</span></h1>
+            </div>
+            
+            <div class="typewriter-container">
+                <div class="typewriter-text" id="typewriter"></div>
+            </div>
+            
+            <div class="alert alert-info mb-4" style="background-color: #f0f9ff; border-left: 4px solid #3b82f6; padding: 12px 16px; display: flex; align-items: center;">
+                <i class="fas fa-info-circle me-3" style="font-size: 20px; color: #3b82f6;"></i>
+                <div>
+                    <strong>AI Learning Mode:</strong> Our budget algorithm analyzes thousands of similar events to provide personalized suggestions based on your inputs.
+                </div>
+            </div>
+            
+            <form method="POST" action="/getdemo" id="budgetForm">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label for="attendees" class="form-label">Number of Attendees</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-users"></i></span>
+                            <input type="number" class="form-control" id="attendees" name="attendees" min="1" required>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <label for="venue_cost" class="form-label">Venue Cost</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-building"></i></span>
+                            <input type="number" class="form-control" id="venue_cost" name="venue_cost" min="0" step="0.01" required>
+                            <span class="input-group-text">$</span>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <label for="food_cost_per_person" class="form-label">Food Cost Per Person</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-utensils"></i></span>
+                            <input type="number" class="form-control" id="food_cost_per_person" name="food_cost_per_person" min="0" step="0.01" required>
+                            <span class="input-group-text">$</span>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <label for="music_system_cost" class="form-label">Music System Cost</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-music"></i></span>
+                            <input type="number" class="form-control" id="music_system_cost" name="music_system_cost" min="0" step="0.01" required>
+                            <span class="input-group-text">$</span>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-12">
+                        <label for="lighting_cost" class="form-label">Lighting Cost</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-lightbulb"></i></span>
+                            <input type="number" class="form-control" id="lighting_cost" name="lighting_cost" min="0" step="0.01" required>
+                            <span class="input-group-text">$</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="d-grid gap-2 mt-4">
+                    <button type="submit" class="btn btn-primary" id="submitBtn">
+                        <i class="fas fa-calculator me-2"></i>Generate AI Budget Analysis
+                    </button>
+                </div>
+            </form>
+            
+            <div class="ai-thinking" id="aiThinking">
+                <span class="ai-thinking-text">AI analyzing inputs</span>
+                <div class="thinking-dots">
+                    <div class="thinking-dot"></div>
+                    <div class="thinking-dot"></div>
+                    <div class="thinking-dot"></div>
+                </div>
+            </div>
+            
+            <div id="resultContainer" style="display: none;">
+                <div class="result-container">
+                    <div class="result-header">
+                        <i class="fas fa-chart-pie"></i>
+                        <h2 class="mb-0">Smart Budget Analysis</h2>
+                    </div>
+                    
+                    <div class="total-budget mb-4" id="totalBudget">
+                        Estimated Total Budget: $<span id="budgetAmount">0</span>
+                    </div>
+                    
+                    <div class="cost-breakdown">
+                        <h3><i class="fas fa-list-ul me-2"></i>Cost Breakdown:</h3>
+                        
+                        <div id="costBreakdown">
+                            <!-- Cost items will be inserted here by JS -->
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4 p-3 rounded" id="suggestionsContainer" style="background-color: #f0f7ff; border: 1px solid #bfdbfe;">
+                        <h3 class="mb-3"><i class="fas fa-lightbulb me-2" style="color: #3b82f6;"></i>AI Budget Suggestions</h3>
+                        <div id="suggestionsList">
+                            <!-- Suggestions will be inserted here by JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <div class="feature-content">
+                        <h3>AI Powered</h3>
+                        <p>Smart budget predictions using machine learning algorithms</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="feature-content">
+                        <h3>Detailed Analysis</h3>
+                        <p>Comprehensive breakdown of all event costs</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-magic"></i>
+                    </div>
+                    <div class="feature-content">
+                        <h3>Smart Suggestions</h3>
+                        <p>Optimize your budget with intelligent recommendations</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="text-center mt-4">
+            <a href="/" class="btn btn-secondary">
+                <i class="fas fa-home me-2"></i>Back to Home
+            </a>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Typewriter effect
+        const typewriterTexts = [
+            "I'll analyze your event details and create a budget estimate...",
+            "Enter your event parameters for an AI-powered budget analysis...",
+            "Let's plan your perfect event with smart budget optimization...",
+            "Budget planning made simple with ML-driven cost analysis...",
+            "Our AI will provide personalized suggestions to optimize your budget..."
+        ];
+        
+        const typewriterElement = document.getElementById('typewriter');
+        let currentTextIndex = 0;
+        
+        function typeNextText() {
+            typewriterElement.textContent = '';
+            typewriterElement.classList.remove('typewriter-text');
+            void typewriterElement.offsetWidth; // Trigger reflow
+            typewriterElement.classList.add('typewriter-text');
+            
+            typewriterElement.textContent = typewriterTexts[currentTextIndex];
+            currentTextIndex = (currentTextIndex + 1) % typewriterTexts.length;
+            
+            setTimeout(typeNextText, 8000); // Change text every 8 seconds
+        }
+        
+        // Start the typewriter effect
+        typeNextText();
+        
+        // Form submission handling with ML simulation
+        const budgetForm = document.getElementById('budgetForm');
+        const aiThinking = document.getElementById('aiThinking');
+        const resultContainer = document.getElementById('resultContainer');
+        const budgetAmount = document.getElementById('budgetAmount');
+        const costBreakdown = document.getElementById('costBreakdown');
+        const suggestionsList = document.getElementById('suggestionsList');
+        
+        budgetForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Show AI thinking animation
+            aiThinking.style.display = 'flex';
+            resultContainer.style.display = 'none';
+            
+            // Get form values
+            const attendees = parseFloat(document.getElementById('attendees').value);
+            const venueCost = parseFloat(document.getElementById('venue_cost').value);
+            const foodCostPerPerson = parseFloat(document.getElementById('food_cost_per_person').value);
+            const musicSystemCost = parseFloat(document.getElementById('music_system_cost').value);
+            const lightingCost = parseFloat(document.getElementById('lighting_cost').value);
+            
+            // Simulate ML processing time
+            setTimeout(function() {
+                // Calculate total food cost
+                const totalFoodCost = attendees * foodCostPerPerson;
+                
+                // Calculate total budget
+                const totalBudget = venueCost + totalFoodCost + musicSystemCost + lightingCost;
+                
+                // Format with 2 decimal places
+                const formattedTotalBudget = totalBudget.toFixed(2);
+                
+                // Update the budget amount
+                budgetAmount.textContent = formattedTotalBudget;
+                
+                // Create cost breakdown items
+                const costItems = [
+                    { label: 'Venue', value: venueCost.toFixed(2) },
+                    { label: 'Food (for ' + attendees + ' attendees)', value: totalFoodCost.toFixed(2) },
+                    { label: 'Music System', value: musicSystemCost.toFixed(2) },
+                    { label: 'Lighting', value: lightingCost.toFixed(2) }
+                ];
+                
+                // Clear previous breakdown
+                costBreakdown.innerHTML = '';
+                
+                // Add each cost item with animation delay
+                costItems.forEach((item, index) => {
+                    const costItem = document.createElement('div');
+                    costItem.className = 'cost-item';
+                    costItem.style.opacity = '0';
+                    costItem.style.transform = 'translateY(10px)';
+                    costItem.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+                    costItem.style.transitionDelay = (index * 0.1) + 's';
+                    
+                    costItem.innerHTML = `
+                        <div class="cost-label">${item.label}</div>
+                        <div class="cost-value">${item.value}</div>
+                    `;
+                    
+                    costBreakdown.appendChild(costItem);
+                    
+                    // Trigger animation
+                    setTimeout(() => {
+                        costItem.style.opacity = '1';
+                        costItem.style.transform = 'translateY(0)';
+                    }, 10);
+                });
+                
+                // Generate AI suggestions based on the inputs
+                generateAISuggestions(attendees, venueCost, foodCostPerPerson, totalFoodCost, musicSystemCost, lightingCost, totalBudget);
+                
+                // Hide AI thinking and show results
+                aiThinking.style.display = 'none';
+                resultContainer.style.display = 'block';
+                
+            }, 2000); // Simulate 2 seconds of AI "thinking"
+        });
+        
+        // Function to generate AI suggestions based on budget data
+        function generateAISuggestions(attendees, venueCost, foodCostPerPerson, totalFoodCost, musicSystemCost, lightingCost, totalBudget) {
+            // Clear previous suggestions
+            suggestionsList.innerHTML = '';
+            
+            const suggestions = [];
+            
+            // Calculate percentage of each cost
+            const venuePct = (venueCost / totalBudget) * 100;
+            const foodPct = (totalFoodCost / totalBudget) * 100;
+            const musicPct = (musicSystemCost / totalBudget) * 100;
+            const lightingPct = (lightingCost / totalBudget) * 100;
+            
+            // Calculate per-person cost
+            const costPerPerson = totalBudget / attendees;
+            
+            // Venue cost suggestions
+            if (venuePct > 40) {
+                suggestions.push({
+                    type: 'warning',
+                    icon: 'building',
+                    text: `Venue costs (${venuePct.toFixed(1)}% of your budget) are higher than recommended. Consider negotiating the venue price or exploring alternative venues to reduce costs.`,
+                    img: 'https://example.com/images/venue-warning.png'
+                });
+            } else if (venuePct < 20 && venueCost > 500) {
+                suggestions.push({
+                    type: 'positive',
+                    icon: 'thumbs-up',
+                    text: `Your venue cost is well-balanced at ${venuePct.toFixed(1)}% of the total budget.`,
+                     img: 'https://example.com/images/venue-warning.png'
+                });
+            }
+            
+            // Food cost suggestions
+            if (foodCostPerPerson > 40) {
+                suggestions.push({
+                    type: 'warning',
+                    icon: 'utensils',
+                    text: `Food cost per person (${foodCostPerPerson.toFixed(2)}) is relatively high. Consider buffet-style options or reducing menu complexity to save costs.`,
+                     img: 'https://example.com/images/venue-warning.png'
+                });
+            } else if (foodCostPerPerson < 15 && attendees > 50) {
+                suggestions.push({
+                    type: 'info',
+                    icon: 'utensils',
+                    text: `Your food budget is quite economical at ${foodCostPerPerson.toFixed(2)} per person. Ensure it meets quality expectations for your event type.`,
+                     img: 'https://example.com/images/venue-warning.png'
+                });
+            }
+            
+            // Technical equipment suggestions
+            const techCost = musicSystemCost + lightingCost;
+            const techPct = (techCost / totalBudget) * 100;
+            
+            if (techPct > 30) {
+                suggestions.push({
+                    type: 'warning',
+                    icon: 'music',
+                    text: `Technical costs (${techPct.toFixed(1)}% of budget) are high. Consider package deals for music and lighting to reduce overall costs.`,
+                     img: 'https://example.com/images/venue-warning.png'
+                });
+            }
+            
+            // Per person cost analysis
+            if (costPerPerson > 100) {
+                suggestions.push({
+                    type: 'info',
+                    icon: 'dollar-sign',
+                    text: `Cost per attendee is ${costPerPerson.toFixed(2)}. For ${attendees} attendees, this represents a premium event budget.`,
+                     img: 'https://example.com/images/venue-warning.png'
+                });
+            } else if (costPerPerson < 30 && attendees > 20) {
+                suggestions.push({
+                    type: 'info',
+                    icon: 'dollar-sign',
+                    text: `Cost per attendee is ${costPerPerson.toFixed(2)}. This is very economical for an event with ${attendees} people.`,
+                     img: 'https://example.com/images/venue-warning.png'
+                });
+            }
+            
+            // Attendee-based recommendations
+            if (attendees < 20 && (musicSystemCost > 300 || lightingCost > 300)) {
+                suggestions.push({
+                    type: 'warning',
+                    icon: 'lightbulb',
+                    text: `For a small event (${attendees} people), your technical setup might be oversized. Consider scaling down music (${musicSystemCost}) or lighting (${lightingCost}) systems.`,
+                     img: 'https://example.com/images/venue-warning.png'
+                });
+            }
+            
+            // Overall budget optimization suggestion
+            if (suggestions.length <= 1) {
+                suggestions.push({
+                    type: 'positive',
+                    icon: 'check-circle',
+                    text: `Your budget distribution appears well-balanced for an event with ${attendees} attendees.`,
+                     img: 'https://example.com/images/venue-warning.png'
+                });
+            }
+            
+            // Add savings recommendation if applicable
+            if (totalBudget > 1000 && attendees > 30) {
+                const potentialSavings = (totalBudget * 0.15).toFixed(2);
+                suggestions.push({
+                    type: 'info',
+                    icon: 'coins',
+                    text: `Based on similar events, there's potential to save approximately ${potentialSavings} through vendor negotiations and package deals.`,
+                     img: 'https://example.com/images/venue-warning.png'
+                });
+            }
+            
+            // If we have no suggestions (unlikely with this logic), add a default
+            if (suggestions.length === 0) {
+                suggestions.push({
+                    type: 'info',
+                    icon: 'info-circle',
+                    text: `Your event budget appears reasonable. Consider getting multiple quotes from vendors to ensure competitive pricing.`,
+                     img: 'https://example.com/images/venue-warning.png'
+                });
+            }
+            
+            // Add suggestions to the UI with animation
+            suggestions.forEach((suggestion, index) => {
+                const typeColors = {
+                    warning: { bg: '#fff7ed', border: '#fed7aa', text: '#9a3412', icon: '#f97316' },
+                    positive: { bg: '#f0fdf4', border: '#bbf7d0', text: '#166534', icon: '#22c55e' },
+                    info: { bg: '#eff6ff', border: '#bfdbfe', text: '#1e40af', icon: '#3b82f6' }
+                };
+                
+                const colors = typeColors[suggestion.type];
+                
+                const suggestionItem = document.createElement('div');
+                suggestionItem.className = 'suggestion-item mb-3';
+                suggestionItem.style.padding = '12px';
+                suggestionItem.style.borderRadius = '8px';
+                suggestionItem.style.backgroundColor = colors.bg;
+                suggestionItem.style.border = `1px solid ${colors.border}`;
+                suggestionItem.style.display = 'flex';
+                suggestionItem.style.alignItems = 'flex-start';
+                suggestionItem.style.opacity = '0';
+                suggestionItem.style.transform = 'translateY(10px)';
+                suggestionItem.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+                suggestionItem.style.transitionDelay = (index * 0.15 + 0.5) + 's';
+                
+                suggestionItem.innerHTML = `
+                    <div style="background-color: white; border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; margin-right: 12px; flex-shrink: 0; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+                        <i class="fas fa-${suggestion.icon}" style="color: ${colors.icon};"></i>
+                    </div>
+                    <div style="color: ${colors.text}; font-size: 14px; line-height: 1.5;">
+                        ${suggestion.text}
+                    </div>
+                `;
+                
+                suggestionsList.appendChild(suggestionItem);
+                
+                // Trigger animation
+                setTimeout(() => {
+                    suggestionItem.style.opacity = '1';
+                    suggestionItem.style.transform = 'translateY(0)';
+                }, 10);
+            });
+        }
+    </script>
+</body>
+</html>
